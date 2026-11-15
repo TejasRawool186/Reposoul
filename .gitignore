@@ -1,0 +1,89 @@
+# ─────────────────────────────────────────────────────────────
+# REPOSOUL — .gitignore
+# ─────────────────────────────────────────────────────────────
+
+# Dependencies
+node_modules/
+
+# Build output — compiled JavaScript + declaration files
+dist/
+
+# ── Secrets and environment variables ──────────────────────
+.env
+.env.local
+.env.development
+.env.production
+.env.staging
+.env.test
+# .env.example is INTENTIONALLY NOT ignored — commit it
+# .env.local.example is INTENTIONALLY NOT ignored — commit it
+
+# ── Logs ───────────────────────────────────────────────────
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ── Runtime data ───────────────────────────────────────────
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# ── Test and coverage output ───────────────────────────────
+coverage/
+.nyc_output/
+test-results/
+*.lcov
+
+# ── TypeScript build info ──────────────────────────────────
+*.tsbuildinfo
+
+# ── OS generated files ─────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ── Editor and IDE files ───────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+
+# ── Temporary files ────────────────────────────────────────
+*.tmp
+*.temp
+.tmp/
+.temp/
+
+# ── Package manager lockfile alternatives ──────────────────
+# (we use npm; keep package-lock.json)
+yarn.lock
+pnpm-lock.yaml
+.pnp.*
+
+# ── Keep these ─────────────────────────────────────────────
+# .kiro/          — Kiro project steering and specs
+# reports/        — Phase audit and completion reports
+# assets/         — Brand assets and design tokens
+# data/           — ML model data and training samples
+# LICENSE         — Upstream MIT license
+# NOTICE.md       — Attribution
+# .env.example    — Credentials template (no real values)
