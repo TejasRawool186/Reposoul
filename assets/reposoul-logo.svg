@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#191919"/>
+      <stop offset="100%" stop-color="#090909"/>
+    </radialGradient>
+    <radialGradient id="embGrad" cx="50%" cy="80%" r="60%">
+      <stop offset="0%" stop-color="#F97316" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#090909" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="phoenixGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F97316"/>
+      <stop offset="60%" stop-color="#FB923C"/>
+      <stop offset="100%" stop-color="#FCD34D"/>
+    </linearGradient>
+    <linearGradient id="wingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F97316" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#FB923C" stop-opacity="0.4"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="98" fill="url(#bgGrad)" stroke="#F97316" stroke-width="2" stroke-opacity="0.6"/>
+  <!-- Ember glow at base -->
+  <ellipse cx="100" cy="155" rx="45" ry="18" fill="url(#embGrad)"/>
+
+  <!-- Left wing -->
+  <path d="M100 85 C80 65, 45 70, 30 55 C40 75, 55 80, 60 95 C70 88, 85 86, 100 85Z"
+        fill="url(#wingGrad)" opacity="0.85"/>
+  <!-- Right wing -->
+  <path d="M100 85 C120 65, 155 70, 170 55 C160 75, 145 80, 140 95 C130 88, 115 86, 100 85Z"
+        fill="url(#wingGrad)" opacity="0.85"/>
+
+  <!-- Body / rising phoenix -->
+  <path d="M100 155 C88 135, 82 115, 86 95 C90 80, 96 75, 100 70 C104 75, 110 80, 114 95 C118 115, 112 135, 100 155Z"
+        fill="url(#phoenixGrad)"/>
+
+  <!-- Head crest -->
+  <path d="M100 70 C97 60, 92 50, 93 40 C96 48, 100 52, 100 55 C100 52, 104 48, 107 40 C108 50, 103 60, 100 70Z"
+        fill="#FCD34D" opacity="0.95"/>
+
+  <!-- Tail feathers -->
+  <path d="M94 148 C88 160, 76 165, 68 162 C76 155, 85 150, 94 148Z" fill="#F97316" opacity="0.7"/>
+  <path d="M106 148 C112 160, 124 165, 132 162 C124 155, 115 150, 106 148Z" fill="#F97316" opacity="0.7"/>
+  <path d="M100 152 C100 165, 97 172, 94 175 C97 168, 100 162, 100 152Z" fill="#FB923C" opacity="0.6"/>
+
+  <!-- Eye -->
+  <circle cx="97" cy="78" r="2.5" fill="#FCD34D"/>
+  <circle cx="97" cy="78" r="1" fill="#090909"/>
+
+  <!-- Inner ember sparks -->
+  <circle cx="85" cy="130" r="1.5" fill="#F97316" opacity="0.6"/>
+  <circle cx="115" cy="125" r="1" fill="#FB923C" opacity="0.5"/>
+  <circle cx="92" cy="108" r="1.2" fill="#FCD34D" opacity="0.7"/>
+  <circle cx="110" cy="112" r="1" fill="#F97316" opacity="0.5"/>
+</svg>

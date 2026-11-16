@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="p" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F97316"/>
+      <stop offset="100%" stop-color="#FCD34D"/>
+    </linearGradient>
+    <linearGradient id="w" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F97316"/>
+      <stop offset="100%" stop-color="#FB923C" opacity="0.5"/>
+    </linearGradient>
+  </defs>
+  <!-- Icon-only phoenix mark, transparent background; works on dark and light -->
+  <path d="M32 26 C24 16, 14 18, 8 12 C12 22, 20 25, 22 32 C25 27, 30 26, 32 26Z" fill="url(#w)"/>
+  <path d="M32 26 C40 16, 50 18, 56 12 C52 22, 44 25, 42 32 C39 27, 34 26, 32 26Z" fill="url(#w)"/>
+  <path d="M32 54 C28 46, 25 38, 27 28 C29 22, 31 20, 32 17 C33 20, 35 22, 37 28 C39 38, 36 46, 32 54Z" fill="url(#p)"/>
+  <path d="M32 17 C31 12, 28 8, 28 4 C30 8, 32 9, 32 11 C32 9, 34 8, 36 4 C36 8, 33 12, 32 17Z" fill="#FCD34D"/>
+  <path d="M30 50 C28 55, 24 58, 20 57 C24 54, 28 51, 30 50Z" fill="#F97316" opacity="0.7"/>
+  <path d="M34 50 C36 55, 40 58, 44 57 C40 54, 36 51, 34 50Z" fill="#F97316" opacity="0.7"/>
+</svg>

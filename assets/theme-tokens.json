@@ -1,0 +1,47 @@
+{
+  "name": "REPOSOUL design tokens",
+  "version": "1.0.0",
+  "meta": {
+    "product": "REPOSOUL",
+    "tagline": "Give abandoned software a second life.",
+    "category": "Open Source Resurrection Workbench",
+    "designDirection": [
+      "Premium developer infrastructure product",
+      "Dark-first interface",
+      "Phoenix-inspired identity",
+      "Warm ember gradients",
+      "Strong contrast, minimal clutter"
+    ]
+  },
+  "color": {
+    "background":      "#090909",
+    "surface":         "#111111",
+    "surfaceElevated": "#191919",
+    "accentPrimary":   "#F97316",
+    "accentSecondary": "#FB923C",
+    "accentTertiary":  "#FCD34D",
+    "textPrimary":     "#F5F5F5",
+    "textSecondary":    "#A1A1AA",
+    "statusSuccess":   "#22C55E",
+    "statusWarning":   "#EAB308",
+    "statusError":     "#EF4444"
+  },
+  "gradient": {
+    "phoenixRise": "linear-gradient(to top right, #F97316 0%, #FB923C 60%, #FCD34D 100%)",
+    "emberGlow":   "radial-gradient(ellipse at bottom, rgba(249,115,22,0.5) 0%, transparent 70%)"
+  },
+  "typography": {
+    "family": "system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    "mono":   "ui-monospace, 'Cascadia Code', 'Fira Code', Menlo, Consolas, monospace",
+    "scale": { "xs": 12, "sm": 14, "base": 16, "lg": 18, "xl": 24, "display": 32 }
+  },
+  "spacing": { "unit": 4, "scale": [4, 8, 12, 16, 24, 32, 48, 64] },
+  "radius":  { "sm": 4, "md": 8, "lg": 12, "pill": 999 },
+  "browser": {
+    "title": "REPOSOUL — Give abandoned software a second life",
+    "description": "An AI-powered open-source resurrection workbench that helps developers discover abandoned repositories, investigate their technical condition, generate revival blueprints and rebuild them with Kiro IDE.",
+    "favicon": "assets/favicon.svg",
+    "ogTitle": "REPOSOUL — Open Source Resurrection Workbench",
+    "ogDescription": "Give abandoned software a second life."
+  }
+}

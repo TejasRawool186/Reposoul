@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640">
+  <defs>
+    <radialGradient id="bg" cx="30%" cy="60%" r="70%">
+      <stop offset="0%" stop-color="#191919"/>
+      <stop offset="100%" stop-color="#090909"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="12%" cy="85%" r="40%">
+      <stop offset="0%" stop-color="#F97316" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#090909" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="phoenix" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F97316"/>
+      <stop offset="60%" stop-color="#FB923C"/>
+      <stop offset="100%" stop-color="#FCD34D"/>
+    </linearGradient>
+    <linearGradient id="wing" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F97316" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#FB923C" stop-opacity="0.3"/>
+    </linearGradient>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F97316"/>
+      <stop offset="100%" stop-color="#FB923C"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1280" height="640" fill="url(#bg)"/>
+  <rect width="1280" height="640" fill="url(#glow)"/>
+  <!-- Border accent line -->
+  <rect x="0" y="0" width="1280" height="4" fill="#F97316" opacity="0.8"/>
+  <rect x="0" y="636" width="1280" height="4" fill="#F97316" opacity="0.3"/>
+
+  <!-- Phoenix mark (left) -->
+  <g transform="translate(80, 100) scale(2.5)">
+    <!-- Wings -->
+    <path d="M60 56 C48 44, 28 46, 18 36 C24 50, 36 54, 38 62 C45 57, 54 56, 60 56Z" fill="url(#wing)"/>
+    <path d="M60 56 C72 44, 92 46, 102 36 C96 50, 84 54, 82 62 C75 57, 66 56, 60 56Z" fill="url(#wing)"/>
+    <!-- Body -->
+    <path d="M60 108 C54 92, 50 76, 52 60 C55 50, 58 46, 60 42 C62 46, 65 50, 68 60 C70 76, 66 92, 60 108Z" fill="url(#phoenix)"/>
+    <!-- Crest -->
+    <path d="M60 42 C58 34, 55 28, 55 22 C57 28, 60 30, 60 32 C60 30, 63 28, 65 22 C65 28, 62 34, 60 42Z" fill="#FCD34D"/>
+  </g>
+
+  <!-- Product name -->
+  <text x="400" y="260" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="96" font-weight="800" letter-spacing="-2" fill="url(#textGrad)">REPOSOUL</text>
+
+  <!-- Tagline -->
+  <text x="402" y="324" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="28" font-weight="400" fill="#A1A1AA" letter-spacing="0.5">Give abandoned software a second life.</text>
+
+  <!-- Category badge -->
+  <rect x="402" y="368" width="440" height="42" rx="8" fill="#191919" stroke="#F97316" stroke-width="1.5" stroke-opacity="0.6"/>
+  <text x="622" y="395" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="16" font-weight="600" fill="#F97316" text-anchor="middle" letter-spacing="2">OPEN SOURCE RESURRECTION WORKBENCH</text>
+
+  <!-- Tech stack tags -->
+  <text x="402" y="470" font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
+        font-size="18" fill="#A1A1AA">TypeScript  ·  GitHub API  ·  ML Scoring  ·  Kiro IDE</text>
+
+  <!-- Hackathon callout -->
+  <text x="402" y="530" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="20" font-weight="500" fill="#F97316" opacity="0.7">🎃 Kiroween 2026 — Resurrection Category</text>
+</svg>
