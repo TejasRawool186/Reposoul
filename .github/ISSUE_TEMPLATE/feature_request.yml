@@ -1,0 +1,55 @@
+name: Feature Request
+description: Suggest a new feature or improvement for REPOSOUL
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before requesting a feature, check the [roadmap in README.md](../../README.md#roadmap)
+        to see if it is already planned. This tool follows a phased development model.
+
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Relevant roadmap phase
+      options:
+        - "Phase 1 — Rebranding (complete)"
+        - "Phase 2 — Engineering Foundation (current)"
+        - "Phase 3 — Revival Blueprint Generator (planned)"
+        - "Phase 4 — REPOSOUL Dashboard (planned)"
+        - "Phase 5 — Kiro IDE Integration (planned)"
+        - "Not on the roadmap — new idea"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: What problem does this feature address?
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: How should the feature work?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Have you considered any other approaches?
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission checklist
+      options:
+        - label: I searched existing issues and this is not a duplicate
+          required: true
+        - label: This feature does not conflict with the Phase 2 boundary (no dashboard/MCP/AI features)
+          required: true
