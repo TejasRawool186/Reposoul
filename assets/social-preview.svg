@@ -56,9 +56,5 @@
 
   <!-- Tech stack tags -->
   <text x="402" y="470" font-family="ui-monospace, 'Cascadia Code', Menlo, monospace"
-        font-size="18" fill="#A1A1AA">TypeScript  ·  GitHub API  ·  ML Scoring  ·  Kiro IDE</text>
-
-  <!-- Hackathon callout -->
-  <text x="402" y="530" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
-        font-size="20" font-weight="500" fill="#F97316" opacity="0.7">🎃 Kiroween 2026 — Resurrection Category</text>
+        font-size="18" fill="#A1A1AA">TypeScript  ·  GitHub API  ·  ML Scoring  ·  Node.js 18+</text>
 </svg>

@@ -1,50 +1,39 @@
-# Licensing and Attribution — REPOSOUL
+# Licensing and Attribution
 
-## Upstream attribution (Kraven)
+## MIT License
 
-- **Upstream repository:** https://github.com/twansolo/kraven
-- **Upstream license:** MIT — Copyright (c) 2025 Kraven Project
-- **Upstream HEAD at fork point:** `2d1c407963865a9ab6c7352c418e1d008ee7c555`
-- The full inherited-component inventory lives in [NOTICE.md](../../NOTICE.md) at the
-  repository root. Keep it current whenever inherited files are renamed or added
+REPOSOUL is released under the MIT License. The full license text is in the root
+[LICENSE](../../LICENSE) file.
 
-## MIT license obligations
+## Third-party attribution
 
-REPOSOUL is a derivative work of the upstream Kraven project. Under the MIT License,
-the following must be preserved in all copies or substantial portions of the software:
+The [LICENSE](../../LICENSE) file contains a copyright notice that must be preserved in
+all copies or substantial portions of the software, as required by the MIT License.
+Do not remove or modify the copyright line in that file.
 
-1. The upstream copyright notice — reproduced verbatim in the root [LICENSE](../../LICENSE)
-2. The MIT permission notice
+The [NOTICE.md](../../NOTICE.md) file documents additional attribution details. It must
+be kept current and must not be deleted.
 
-Rules:
+## Package license field
 
-- **Never** edit the LICENSE file's upstream copyright line
-- **Never** claim inherited code as newly authored
-- New REPOSOUL-created files are listed as new work in NOTICE.md
-- The package `license` field in `package.json` is `MIT` (corrected from an upstream
-  `ISC` mismatch in Phase 1)
-
-## Naming rules in code and docs
-
-- Product/brand name: **REPOSOUL** (upstream name must not appear in active user-facing
-  surfaces — CLI, help, output, UI)
-- The upstream name **may and must** appear in: NOTICE.md, LICENSE (if referenced),
-  attribution sections of README, and provenance documentation
-- Any scan of the codebase that finds the upstream name in an active surface is a
-  branding bug; in attribution contexts it is required
+`package.json` carries `"license": "MIT"`. This must not be changed.
 
 ## Third-party code and assets
 
-- Runtime/dev dependencies (axios, chalk, commander, dotenv, ora, typescript, ts-node,
-  nodemon) carry their own licenses — audit with `npx license-checker --summary` before
-  any publication
-- The new REPOSOUL logo, icon, favicon, and social preview (`assets/*.svg`) are original
-  works created for this project — no third-party marks are used
+- Runtime and development dependencies carry their own licenses. Audit with
+  `npx license-checker --summary` before any publication.
+- Brand assets in `assets/` (SVG logos, theme tokens) are original works for REPOSOUL.
+  No third-party marks or logos are used.
 - Do not introduce third-party logos, fonts, or images without verifying usage rights
-  and recording them in NOTICE.md
+  and updating NOTICE.md.
+
+## Naming rules
+
+- Product name: **REPOSOUL** — use consistently across all surfaces.
+- Do not introduce alternative names or aliases in user-facing documentation.
 
 ## License headers policy
 
-Source files currently carry no per-file headers (upstream convention). If per-file
-headers are introduced later, they must include the upstream copyright retention for
-inherited files, not only REPOSOUL attribution.
+Source files do not carry per-file headers (project convention). If per-file headers
+are introduced, include the copyright notice from LICENSE to satisfy the MIT requirement
+for derived files.

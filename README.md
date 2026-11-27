@@ -1,203 +1,344 @@
-<div align="center">
+# REPOSOUL
 
-  <img src="assets/reposoul-logo.svg" alt="REPOSOUL logo — a rising phoenix in ember orange" width="180" height="180">
+**Open Source Resurrection Workbench**
 
-  # REPOSOUL
+Give abandoned software a second life.
 
-  **Give abandoned software a second life.**
-
-  An AI-powered open-source resurrection workbench
-
-  [![License: MIT](https://img.shields.io/badge/License-MIT-F97316.svg)](LICENSE)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-  [![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
-
-</div>
+REPOSOUL is a command-line tool that helps developers discover abandoned open-source repositories, assess their technical and community condition, and plan their revival.
 
 ---
 
-## 🧭 What is REPOSOUL?
+## Overview
 
-REPOSOUL is an **Open Source Resurrection Workbench**. It helps developers discover abandoned open-source repositories, understand their technical and community condition, and plan their revival — with a longer-term goal of using Kiro IDE to rebuild and validate revived projects.
+Millions of open-source repositories go unmaintained each year. Projects that once solved real problems — with active communities, working codebases, and significant adoption — stop receiving updates and gradually become unusable. Finding which of these projects are worth reviving, and understanding the effort involved, is currently an unsystematic process.
 
-**Built for Kiroween 2026 — Resurrection category.**
+REPOSOUL addresses this by providing:
 
-REPOSOUL is a new project built using selected components from the upstream open-source project [Kraven](https://github.com/twansolo/kraven) (MIT). Full attribution is in [NOTICE.md](NOTICE.md).
+- Automated discovery of abandoned repositories on GitHub
+- Quantitative scoring for abandonment likelihood and revival feasibility
+- Dependency health analysis across multiple languages and ecosystems
+- Fork ecosystem analysis to identify active community continuations
+- Machine learning-enhanced scoring when trained models are available
+- Technical debt quantification for organizations and individual repositories
 
-## 📌 Problem statement
+---
 
-Millions of open-source repositories are abandoned every year — projects that solved real problems, accumulated communities, and then went quiet. Developers who want to revive them have no systematic way to:
+## Features
 
-- **Discover** which abandoned projects are worth reviving
-- **Investigate** their technical condition (dependency rot, security debt, community signals)
-- **Plan** a revival effort with realistic effort and success estimates
-- **Execute** the revival with modern tooling
-
-REPOSOUL exists to close that gap.
-
-## ✅ What REPOSOUL currently does (implemented and verified)
-
-REPOSOUL is currently a **TypeScript CLI tool**. These capabilities are inherited, rebranded and verified in this codebase:
-
-| Capability | Description | Status |
+| Feature | Description | Status |
 |---|---|---|
-| Repository discovery | Search GitHub for abandoned repositories by language, category, stars, and push-date | ✅ Implemented |
-| Abandonment scoring | 0–100% rule-based abandonment likelihood | ✅ Implemented |
-| Revival potential | 0–100% rule-based feasibility score | ✅ Implemented |
-| Dependency analysis | Multi-language: JavaScript/TypeScript (npm), Python (PyPI), Rust (crates.io), Go (proxy), Java (Maven) | ✅ Implemented |
-| Fork analysis | Fork activity, divergence, and maintainer responsiveness | ✅ Implemented |
-| Organization scanning | Per-org scans with tech-debt cost/time/security metrics | ✅ Implemented |
-| ML scoring layer | Linear/logistic regression models trained in-process, blended with rule-based scores | ⚙️ Implemented, ships with untrained placeholder models |
-| Output formats | Table, JSON, and Markdown | ✅ Implemented |
-| Auth | GitHub PAT and OAuth tokens with auto-detection | ✅ Implemented |
+| Repository discovery | Search GitHub by language, stars, activity date, and category | Implemented |
+| Abandonment scoring | 0–100 rule-based score derived from commit activity, issue metrics, and maintenance signals | Implemented |
+| Revival potential | 0–100 feasibility score based on stars, forks, license, complexity, and language health | Implemented |
+| Community analysis | Issue response time, contributor count, engagement metrics | Implemented |
+| Dependency analysis | JavaScript/TypeScript (npm), Python (PyPI), Rust (crates.io), Go (proxy), Java (Maven) | Implemented |
+| Fork analysis | Fork activity, divergence from origin, maintainer responsiveness | Implemented |
+| Organization scanning | Per-organization scans with tech-debt cost, time, security, and business-impact metrics | Implemented |
+| ML scoring layer | In-process linear and logistic regression, blended with rule-based scores | Implemented (models require training) |
+| Output formats | Table, JSON, Markdown | Implemented |
 
-> **Note:** The ML layer is fully wired, but the bundled `data/ml-models.json` ships with `accuracy: 0` placeholder weights. Run `reposoul train` to train real models before relying on ML-enhanced scores.
+---
 
-## 🚧 In progress
+## Prerequisites
 
-- Rebranding and project foundation (this phase)
-- Test suite (none exists yet — see [CONTRIBUTING.md](CONTRIBUTING.md))
+- Node.js 18 or later
+- npm 9 or later
+- A GitHub personal access token (recommended — raises rate limit from 60 to 5,000 requests per hour)
 
-## 🗺️ Planned (not yet implemented)
+---
 
-- `reposoul discover` / `investigate` / `blueprint` / `workspace` / `validate` / `report` — the future command surface
-- **REPOSOUL Dashboard** — a web frontend
-- AI-driven revival blueprints
-- Kiro IDE integration (agent orchestration, MCP server) — see the Kiro vision below
-- Automated validation of revived projects
+## Installation
 
-None of the planned features above are functional today.
+### From source
 
-## 🏛️ Current architecture
+```bash
+git clone https://github.com/TejasRawool186/Reposoul.git
+cd Reposoul
+npm install
+npm run build
+```
+
+### Global installation (optional)
+
+```bash
+npm link
+reposoul --version
+```
+
+---
+
+## Configuration
+
+### GitHub token
+
+Create a token at [github.com/settings/tokens](https://github.com/settings/tokens).
+
+Required scope:
+- `public_repo` for public repository analysis
+- `repo` for private repository scanning
+
+Create a `.env` file in the project root:
+
+```
+GITHUB_TOKEN=your_token_here
+```
+
+REPOSOUL loads the token from the current working directory first, then from the installation root. The `.env` file is never committed — it is excluded by `.gitignore`.
+
+For OAuth tokens (GitHub Apps, enterprise):
+
+```
+GITHUB_OAUTH_TOKEN=your_oauth_token_here
+```
+
+See [setup-token.md](setup-token.md) for detailed token configuration options.
+
+---
+
+## Usage
+
+### Repository discovery
+
+```bash
+# Search for abandoned TypeScript repositories
+reposoul hunt --language typescript --min-stars 100 --pushed-before 2022-01-01
+
+# Filter by category
+reposoul hunt --category cli-tool --min-stars 50 --pushed-before 2023-01-01 --limit 10
+
+# Output as JSON
+reposoul hunt --language rust --min-stars 200 --output json
+```
+
+### Single repository analysis
+
+```bash
+reposoul analyze owner/repository-name
+reposoul analyze owner/repository-name --output markdown
+reposoul analyze owner/repository-name --ml-enhanced
+```
+
+### Fork analysis
+
+```bash
+reposoul forks owner/repository-name --max-forks 20
+reposoul forks owner/repository-name --sort activity --output markdown
+```
+
+### Organization scanning
+
+```bash
+reposoul scan your-organization --max-repos 50 --min-stars 100
+reposoul scan your-organization --output markdown > report.md
+reposoul scan-multi org1,org2,org3 --max-repos 20
+```
+
+### ML-enhanced scoring
+
+```bash
+# Train models first
+reposoul train --sample-size 200
+
+# Check model status
+reposoul ml-info
+
+# Use ML scoring
+reposoul hunt --language typescript --ml-enhanced --ml-confidence 0.8
+reposoul analyze owner/repo --ml-enhanced
+```
+
+### Utilities
+
+```bash
+# List supported languages for dependency analysis
+reposoul languages
+
+# Check GitHub API rate limit
+reposoul rate-limit
+
+# Help
+reposoul --help
+reposoul hunt --help
+```
+
+---
+
+## Command reference
+
+| Command | Purpose |
+|---|---|
+| `hunt` | Search GitHub for abandoned repositories |
+| `analyze` | Analyze a single repository |
+| `forks` | Analyze the fork ecosystem of a repository |
+| `train` | Train ML models on repository data |
+| `scan` | Scan all repositories for an organization or user |
+| `scan-multi` | Compare multiple organizations |
+| `languages` | List supported dependency-analysis languages |
+| `ml-info` | Display ML model status and accuracy |
+| `rate-limit` | Check GitHub API rate limit |
+
+---
+
+## Score interpretation
+
+### Abandonment score (0–100)
+
+| Range | Interpretation |
+|---|---|
+| 0–30 | Active — maintained project |
+| 31–60 | At risk — showing signs of reduced activity |
+| 61–80 | Likely abandoned |
+| 81–100 | Definitively abandoned |
+
+### Revival potential (0–100)
+
+| Range | Interpretation |
+|---|---|
+| 0–30 | Poor candidate |
+| 31–60 | Moderate potential |
+| 61–80 | Good candidate |
+| 81–100 | Strong revival opportunity |
+
+---
+
+## Architecture
 
 ```
 src/
-├── cli.ts                  # Commander CLI: hunt, analyze, forks, train, scan, scan-multi, languages, ml-info, rate-limit
-├── reposoul.ts             # ReposoulHunter orchestration class
-├── index.ts                # Library exports
-├── types/index.ts          # Shared types + REPOSOUL brand/color tokens
+├── cli.ts                          Entry point — Commander CLI, all commands and formatters
+├── reposoul.ts                     ReposoulHunter — orchestrates search, analysis, and ML
+├── index.ts                        Library exports
+├── types/
+│   └── index.ts                    Shared interfaces and design tokens
 └── services/
-    ├── github.ts           # GitHub API client (search, repos, issues, commits, auth)
-    ├── analyzer.ts         # Rule-based abandonment/revival scoring
-    ├── dependency-analyzer.ts      # npm deps + multi-language dispatch
-    ├── multi-language-analyzer.ts  # Language detection + dispatch
-    ├── fork-analyzer.ts           # Fork ecosystem analysis
-    ├── ml-trainer.ts / ml-predictor.ts  # ML training + prediction
-    ├── organization-scanner.ts     # Org scans, tech-debt metrics
-    └── language-analyzers/         # python, rust, go, java
+    ├── github.ts                   GitHub REST API client (axios)
+    ├── analyzer.ts                 Rule-based repository scoring
+    ├── dependency-analyzer.ts      npm dependency health and language dispatch
+    ├── multi-language-analyzer.ts  Language detection and routing
+    ├── fork-analyzer.ts            Fork ecosystem comparison
+    ├── ml-trainer.ts               In-process ML training and model persistence
+    ├── ml-predictor.ts             Model loading, prediction, and score blending
+    ├── organization-scanner.ts     Organization scans and tech-debt metrics
+    └── language-analyzers/
+        ├── python-analyzer.ts      PyPI and OSV vulnerability data
+        ├── rust-analyzer.ts        crates.io and RustSec
+        ├── go-analyzer.ts          Go module proxy
+        └── java-analyzer.ts        Maven Central
 ```
 
-Data artifacts live in `data/` (ML models and training data). Brand assets and design tokens live in `assets/`.
+### Data flow
 
-## 🛠️ Technology stack
+```
+CLI input
+  └─ ReposoulHunter
+       ├─ GitHubService — search and fetch repository data
+       ├─ RepositoryAnalyzer — scoring pipeline
+       │    ├─ DependencyAnalyzer — dependency health
+       │    └─ MLPredictor — optional ML enhancement
+       └─ Output (table / JSON / Markdown)
+```
 
-- **TypeScript** (strict, CommonJS, compiled with `tsc`)
-- **Node.js** 18+
-- **Commander** (CLI), **Chalk** + **Ora** (terminal UX)
-- **Axios** (GitHub REST API)
-- **In-process ML** (linear/logistic regression — no external ML service)
+---
 
-## 📦 Installation
+## Technology stack
+
+| Component | Technology |
+|---|---|
+| Runtime | Node.js 18+ |
+| Language | TypeScript 5.x (strict, CommonJS) |
+| CLI framework | Commander 14 |
+| HTTP client | Axios 1.21+ |
+| Terminal output | Chalk 4, Ora 5 |
+| Configuration | dotenv 16 |
+| ML | In-process linear and logistic regression (no external service) |
+| Test framework | Vitest 3.x |
+| Linter | ESLint 9 with TypeScript ESLint |
+| Formatter | Prettier 3 |
+
+---
+
+## Development
 
 ```bash
-# From this repository (not yet published to npm)
+# Install dependencies
 npm install
+
+# Build
 npm run build
 
-# Optional: make the `reposoul` command global on your machine
-npm link
+# Run in development mode (ts-node, no build required)
+npm run dev
+
+# Type-check without emitting
+npm run typecheck
+
+# Run tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+
+# Lint
+npm run lint
+
+# Watch mode
+npm run test:watch
 ```
 
-### 🔑 GitHub token (recommended)
+### Project structure conventions
 
-A token raises your API rate limit from 60 to 5,000 requests/hour:
+- One exported class per service file
+- All shared TypeScript interfaces in `src/types/index.ts`
+- Design tokens in `assets/theme-tokens.json` and `src/types/index.ts`
+- Phase reports and audit documents in `reports/`
+- Brand assets in `assets/`
+- ML data in `data/`
 
-1. Create a token at [github.com/settings/tokens](https://github.com/settings/tokens)
-2. Scope: `public_repo` (or `repo` for private-repository scanning)
-3. Put it in a `.env` file in the project root:
+---
 
-```env
-GITHUB_TOKEN=ghp_your_token_here
-```
+## Testing
 
-Detailed setup: [setup-token.md](setup-token.md)
-
-## 🧑‍💻 Development
+The project uses Vitest with V8 coverage. Run:
 
 ```bash
-npm install
-npm run build     # compile TypeScript → dist/
-npm run dev       # run CLI via ts-node
-npm test          # no test suite yet (see CONTRIBUTING.md)
+npm test                # single-pass run
+npm run test:coverage   # with coverage report
 ```
 
-## ⌨️ CLI usage (verified commands)
+Current coverage baseline: ~34% lines, ~62% branches, ~56% functions.
 
-```bash
-# Discover abandoned TypeScript repositories
-reposoul hunt --language typescript --min-stars 100 --pushed-before 2022-01-01
+The test suite mocks all external API calls. No real GitHub credentials or network access are required to run tests.
 
-# Analyze a specific repository
-reposoul analyze owner/repository-name
+---
 
-# Analyze the fork ecosystem of an abandoned project
-reposoul forks bower/bower --max-forks 10
+## Roadmap
 
-# Scan an organization (includes tech-debt cost metrics)
-reposoul scan microsoft --max-repos 20 --min-stars 100
+- [x] Repository discovery and scoring engine
+- [x] Multi-language dependency analysis
+- [x] Fork ecosystem analysis
+- [x] ML scoring layer
+- [x] Organization scanning with tech-debt metrics
+- [x] Vitest test suite and GitHub Actions CI
+- [ ] CLI command rename (discover, investigate)
+- [ ] Revival blueprint generator
+- [ ] REPOSOUL web dashboard
+- [ ] Kiro IDE integration
 
-# Compare multiple organizations
-reposoul scan-multi microsoft,google,facebook --max-repos 15
+---
 
-# Train ML models, then use ML-enhanced scoring
-reposoul train --sample-size 200
-reposoul hunt --language typescript --ml-enhanced --ml-confidence 0.8
+## Contributing
 
-# Utilities
-reposoul languages    # supported dependency-analysis languages
-reposoul ml-info      # ML model status
-reposoul rate-limit   # GitHub API rate limit
-```
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-Output formats: `--output table|json|markdown` on `hunt`, `analyze`, `forks`, and `scan`.
+Before submitting a pull request:
 
-Full command examples: [examples.md](examples.md)
+1. Run `npm run build` — must pass with zero errors
+2. Run `npm test` — all tests must pass
+3. Run `npm run typecheck` — zero TypeScript errors
+4. Add tests for new behavior
 
-## 📸 Screenshots
+---
 
-*(Placeholders — screenshots to be captured)*
+## License
 
-| CLI output | Status |
-|---|---|
-| `reposoul hunt` table results | 📷 TODO |
-| `reposoul analyze` detailed report | 📷 TODO |
-| `reposoul scan` organization report | 📷 TODO |
-
-## 🔭 Product vision: REPOSOUL + Kiro IDE
-
-The end state is a two-part workflow:
-
-1. **REPOSOUL Dashboard** — discover, investigate, and triage abandoned repositories; generate a revival blueprint (scope, effort, dependencies, risks).
-2. **Kiro IDE** — consume the blueprint and drive the actual revival: specs, tasks, agent-assisted code repair, and validation.
-
-This integration is **planned, not implemented**. Phase 1 (this release) is rebranding and project identity only.
-
-## 🗓️ Roadmap
-
-- [x] Phase 1 — Rebranding, Git detachment, attribution, Kiro project foundation
-- [ ] Phase 2 — Test suite, CLI command surface rename (`discover`, `investigate`, …)
-- [ ] Phase 3 — Revival blueprint generator
-- [ ] Phase 4 — REPOSOUL Dashboard web frontend
-- [ ] Phase 5 — Kiro IDE integration (agents, MCP, validation workflows)
-
-## 🤝 Contributing
-
-Contributions are welcome — read [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## 📄 License
-
-MIT — see [LICENSE](LICENSE). This project includes code derived from the upstream Kraven project; attribution in [NOTICE.md](NOTICE.md).
-
-## 🙏 Upstream attribution
-
-REPOSOUL is built on selected components from [Kraven](https://github.com/twansolo/kraven) by its original authors, used under the MIT license. See [NOTICE.md](NOTICE.md) for inherited-component details.
+MIT — see [LICENSE](LICENSE).

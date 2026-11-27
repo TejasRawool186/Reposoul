@@ -4,8 +4,6 @@
 
 REPOSOUL's organization scanning (`reposoul scan`) includes comprehensive tech-debt impact analysis, providing quantifiable metrics for cost, time, security risk, and business impact. These metrics help organizations make data-driven decisions about technical debt management.
 
-*The metrics engine is inherited from the upstream Kraven project; see NOTICE.md for attribution.*
-
 ## Metrics categories
 
 ### Financial impact

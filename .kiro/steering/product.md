@@ -7,7 +7,6 @@
 - **Tagline:** Give abandoned software a second life.
 - **Description:** An AI-powered open-source resurrection workbench that helps developers discover abandoned repositories, investigate their technical condition, generate revival blueprints and work with Kiro IDE to rebuild and validate projects.
 - **Direction:** REPOSOUL Dashboard + Kiro IDE
-- **Context:** Kiroween 2026 — Resurrection category
 
 ## Mission
 
@@ -19,7 +18,7 @@ accidental, and connects the resulting plan to an execution environment (Kiro ID
 
 1. **Honesty in output** — never present unimplemented features as working; scores and
    reports must be verifiable
-2. **Preserve provenance** — upstream attribution (Kraven, MIT) is maintained in NOTICE.md
+2. **Attribution integrity** — third-party license notices are preserved as required by law
 3. **Dark-first, premium** — the visual identity is a phoenix rising from ember
    (tokens in `assets/theme-tokens.json` and `src/types/index.ts`)
 4. **Data-driven** — every score (abandonment, revival, tech debt) must trace to a metric
@@ -34,10 +33,10 @@ accidental, and connects the resulting plan to an execution environment (Kiro ID
 4. **Workspace** — prepare a Kiro IDE workspace from a blueprint (planned)
 5. **Validate** — rebuild and verify the revived project (planned)
 
-## Current scope (Phase 1)
+## Current scope (Phase 2)
 
-Rebranding, project identity, Git detachment, documentation, attribution and validation
-only. No new product features. The working CLI (`hunt`, `analyze`, `forks`, `train`,
+Fully functional CLI with 9 commands, Vitest test suite, GitHub Actions CI, ESLint, and
+security-audited dependencies. The working CLI (`hunt`, `analyze`, `forks`, `train`,
 `scan`, `scan-multi`, `languages`, `ml-info`, `rate-limit`) is the shipped feature set.
 
 ## Future command surface (proposed, not implemented)
