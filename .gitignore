@@ -8,6 +8,10 @@ node_modules/
 # Build output — compiled JavaScript + declaration files
 dist/
 
+# Next.js dashboard build output
+web/.next/
+web/node_modules/
+
 # ── Secrets and environment variables ──────────────────────
 .env
 .env.local
