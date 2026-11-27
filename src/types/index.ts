@@ -415,3 +415,70 @@ export interface BlueprintOptions {
   /** Maximum number of risks to include */
   maxRisks?: number;
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Phase 5 — MCP (Model Context Protocol) Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** JSON Schema primitive types used in MCP input schemas */
+export type JsonSchemaType = 'string' | 'number' | 'integer' | 'boolean' | 'array' | 'object';
+
+/** A single property definition within an MCP tool's input schema */
+export interface McpPropertySchema {
+  type: JsonSchemaType;
+  description: string;
+  default?: unknown;
+  minimum?: number;
+  maximum?: number;
+  items?: { type: JsonSchemaType };
+  enum?: string[];
+}
+
+/** JSON Schema object describing a tool's accepted parameters */
+export interface McpInputSchema {
+  type: 'object';
+  properties: Record<string, McpPropertySchema>;
+  required?: string[];
+}
+
+/** An MCP tool definition — advertised to the host (Kiro) on initialize */
+export interface McpTool {
+  name: string;
+  description: string;
+  inputSchema: McpInputSchema;
+}
+
+/** MCP JSON-RPC request */
+export interface McpRequest {
+  jsonrpc: '2.0';
+  id: string | number;
+  method: string;
+  params?: Record<string, unknown>;
+}
+
+/** MCP JSON-RPC success response */
+export interface McpResponse {
+  jsonrpc: '2.0';
+  id: string | number;
+  result: unknown;
+}
+
+/** MCP JSON-RPC error response */
+export interface McpErrorResponse {
+  jsonrpc: '2.0';
+  id: string | number | null;
+  error: {
+    code: number;
+    message: string;
+    data?: unknown;
+  };
+}
+
+/** Standard MCP error codes */
+export const MCP_ERROR = {
+  PARSE_ERROR:      -32700,
+  INVALID_REQUEST:  -32600,
+  METHOD_NOT_FOUND: -32601,
+  INVALID_PARAMS:   -32602,
+  INTERNAL_ERROR:   -32603,
+} as const;
