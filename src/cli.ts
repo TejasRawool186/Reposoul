@@ -1278,4 +1278,153 @@ function getTalentRetentionColor(score: number) {
   return chalk.red.bold;
 }
 
+// ─── blueprint command ───────────────────────────────────────────────────────
+
+program
+  .command('blueprint')
+  .description('Generate a revival blueprint for an abandoned repository (format: owner/repo)')
+  .argument('<repository>', 'Repository in owner/repo format')
+  .option('--output <format>', 'Output format: markdown | json | text', 'markdown')
+  .option('--file <path>', 'Write output to a file instead of stdout')
+  .option('--include-deps', 'Run dependency analysis and include in blueprint', false)
+  .option('--include-forks', 'Run fork analysis and include in blueprint', false)
+  .option('--ml-enhanced', 'Use ML-enhanced scoring if models are available', false)
+  .action(async (repository: string, options, command) => {
+    const spinner = options.output === 'json' ? null : ora('Analysing repository...').start();
+
+    try {
+      const { BlueprintGenerator } = await import('./services/blueprint-generator');
+      const { BlueprintFormatter } = await import('./services/blueprint-formatter');
+      const authConfig = createGitHubAuthFromOptions(command.parent?.opts() || {});
+      const reposoul = new ReposoulHunter(authConfig);
+
+      if (spinner) spinner.text = 'Fetching repository data...';
+
+      const mlConfig: PredictionConfig = {
+        useMLScoring: options.mlEnhanced,
+        confidenceThreshold: 0.7,
+        fallbackToRuleBase: true,
+      };
+      const analysis = await reposoul.analyzeRepository(repository, options.mlEnhanced, mlConfig);
+
+      let dependencyAnalysis;
+      if (options.includeDeps) {
+        if (spinner) spinner.text = 'Analysing dependencies...';
+        const { DependencyAnalyzer } = await import('./services/dependency-analyzer');
+        const depAnalyzer = new DependencyAnalyzer(reposoul.githubService);
+        const [owner, repo] = repository.split('/');
+        dependencyAnalysis = await depAnalyzer.analyzeDependencies(owner, repo);
+      }
+
+      let forkComparison;
+      if (options.includeForks) {
+        if (spinner) spinner.text = 'Analysing forks...';
+        const forkAnalyzer = new ForkAnalyzer(reposoul.githubService);
+        const [owner, repo] = repository.split('/');
+        forkComparison = await forkAnalyzer.analyzeForks(owner, repo, { maxForks: 10 });
+      }
+
+      if (spinner) spinner.text = 'Generating blueprint...';
+
+      const generator = new BlueprintGenerator();
+      const blueprint = generator.generate(analysis, dependencyAnalysis, forkComparison, {
+        mlEnhanced: options.mlEnhanced,
+      });
+
+      if (spinner) spinner.stop();
+
+      const formatter = new BlueprintFormatter();
+      const outputFormat = (options.output as 'json' | 'markdown' | 'text') || 'markdown';
+      const output = formatter.format(blueprint, outputFormat);
+
+      if (options.file) {
+        const filePath = path.resolve(options.file);
+        fs.writeFileSync(filePath, output, 'utf-8');
+        console.log(chalk.green(`Blueprint written to: ${filePath}`));
+      } else {
+        console.log(output);
+      }
+
+    } catch (error) {
+      if (spinner) spinner.stop();
+      console.error(chalk.red('Blueprint generation failed:'), error instanceof Error ? error.message : error);
+      process.exit(1);
+    }
+  });
+
+// ─── report command ───────────────────────────────────────────────────────────
+
+program
+  .command('report')
+  .description('Generate a comprehensive revival report for a repository (format: owner/repo)')
+  .argument('<repository>', 'Repository in owner/repo format')
+  .option('--file <path>', 'Write report to a file (default: <repo-name>-report.md)')
+  .option('--include-deps', 'Run dependency analysis and include in report', false)
+  .option('--include-forks', 'Run fork analysis and include in report', false)
+  .option('--ml-enhanced', 'Use ML-enhanced scoring if models are available', false)
+  .action(async (repository: string, options, command) => {
+    const spinner = ora('Generating report...').start();
+
+    try {
+      const { BlueprintGenerator } = await import('./services/blueprint-generator');
+      const { BlueprintFormatter } = await import('./services/blueprint-formatter');
+      const authConfig = createGitHubAuthFromOptions(command.parent?.opts() || {});
+      const reposoul = new ReposoulHunter(authConfig);
+
+      spinner.text = 'Fetching repository data...';
+      const mlConfig: PredictionConfig = {
+        useMLScoring: options.mlEnhanced,
+        confidenceThreshold: 0.7,
+        fallbackToRuleBase: true,
+      };
+      const analysis = await reposoul.analyzeRepository(repository, options.mlEnhanced, mlConfig);
+
+      let dependencyAnalysis;
+      if (options.includeDeps) {
+        spinner.text = 'Analysing dependencies...';
+        const { DependencyAnalyzer } = await import('./services/dependency-analyzer');
+        const depAnalyzer = new DependencyAnalyzer(reposoul.githubService);
+        const [owner, repo] = repository.split('/');
+        dependencyAnalysis = await depAnalyzer.analyzeDependencies(owner, repo);
+      }
+
+      let forkComparison;
+      if (options.includeForks) {
+        spinner.text = 'Analysing forks...';
+        const forkAnalyzer = new ForkAnalyzer(reposoul.githubService);
+        const [owner, repo] = repository.split('/');
+        forkComparison = await forkAnalyzer.analyzeForks(owner, repo, { maxForks: 10 });
+      }
+
+      spinner.text = 'Building report...';
+      const generator = new BlueprintGenerator();
+      const blueprint = generator.generate(analysis, dependencyAnalysis, forkComparison, {
+        mlEnhanced: options.mlEnhanced,
+      });
+
+      const formatter = new BlueprintFormatter();
+      const report = formatter.report(blueprint);
+
+      const repoSlug = repository.replace('/', '-');
+      const filePath = path.resolve(options.file || `${repoSlug}-report.md`);
+      fs.writeFileSync(filePath, report, 'utf-8');
+
+      spinner.stop();
+      console.log(chalk.green(`Report saved to: ${filePath}`));
+      console.log('');
+      console.log(chalk.bold('Summary:'));
+      console.log(`  Repository:     ${blueprint.repository}`);
+      console.log(`  Recommendation: ${chalk.bold(blueprint.recommendation.toUpperCase())}`);
+      console.log(`  Overall Score:  ${blueprint.overallScore}/100`);
+      console.log(`  Effort:         ${blueprint.effortEstimate.minDays}–${blueprint.effortEstimate.maxDays} days`);
+      console.log(`  Risks:          ${blueprint.riskRegister.length}`);
+      console.log(`  Action Items:   ${blueprint.actionItems.length}`);
+
+    } catch (error) {
+      spinner.stop();
+      console.error(chalk.red('Report generation failed:'), error instanceof Error ? error.message : error);
+      process.exit(1);
+    }
+  });
+
 program.parse();

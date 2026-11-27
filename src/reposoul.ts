@@ -187,6 +187,25 @@ export class ReposoulHunter {
   }
 
   /**
+   * Generate a revival blueprint for a repository.
+   * Runs the full analysis pipeline and passes results to BlueprintGenerator.
+   */
+  async generateBlueprint(
+    fullName: string,
+    options: import('./types').BlueprintOptions = {}
+  ): Promise<import('./types').RevivalBlueprint> {
+    const { BlueprintGenerator } = await import('./services/blueprint-generator');
+    const mlConfig: import('./types').PredictionConfig = {
+      useMLScoring: options.mlEnhanced ?? false,
+      confidenceThreshold: 0.7,
+      fallbackToRuleBase: true,
+    };
+    const analysis = await this.analyzeRepository(fullName, options.mlEnhanced, mlConfig);
+    const generator = new BlueprintGenerator();
+    return generator.generate(analysis, undefined, undefined, options);
+  }
+
+  /**
    * Build a human-readable query string
    */
   private buildQueryString(filters: SearchFilters): string {
