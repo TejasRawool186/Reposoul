@@ -37,13 +37,7 @@ Do not publish until the Phase 2 test suite exists.
 
 ## Future: REPOSOUL Dashboard (Phase 4)
 
-A web dashboard is planned but **not implemented**. When it exists, this section will cover:
-
-- Static hosting of the dashboard
-- GitHub API token handling in the browser (user-supplied, localStorage only)
-- CORS and rate-limit strategy
-
-The previous upstream project deployed a static GitHub Pages site; that configuration does not carry over because REPOSOUL has no web frontend yet.
+A web dashboard is planned but not yet implemented. When it exists, this section will cover static hosting, GitHub API token handling, CORS, and rate-limit strategy.
 
 ## Environment configuration
 
