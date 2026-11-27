@@ -23,7 +23,35 @@ REPOSOUL is a compiled TypeScript CLI (`tsc` → `dist/`, CommonJS). Entry point
 | `services/organization-scanner.ts` | Org/user scans, tech-debt cost/time/security/business metrics |
 | `types/index.ts` | Canonical shared interfaces + REPOSOUL brand tokens (single source of truth — do NOT duplicate in services) |
 
-### Phase 3 additions
+### Phase 4 architecture (web dashboard)
+
+The dashboard lives in `web/` as a Next.js 14 App Router application. It calls three API
+routes that dynamically import the existing `src/` services at runtime:
+
+```
+web/
+├── app/
+│   ├── layout.tsx                 Root layout — dark theme, Header, TokenProvider
+│   ├── page.tsx                   Home / Discover — search form + results grid
+│   ├── investigate/[owner]/[repo] Repository analysis detail view
+│   ├── blueprint/[owner]/[repo]   Blueprint viewer — risk register, action checklist
+│   ├── api/search/route.ts        → GitHubService.searchRepositories
+│   ├── api/analyze/route.ts       → ReposoulHunter.analyzeRepository
+│   └── api/blueprint/route.ts    → ReposoulHunter.generateBlueprint
+├── components/
+│   ├── Header.tsx                 Sticky header with token management
+│   ├── RepoCard.tsx               Repository card for search results
+│   └── ui/                        ScoreRing, Badge, Card, Button, Input, Spinner
+└── lib/
+    ├── token-context.tsx          React context — GitHub token in sessionStorage only
+    └── api.ts                     Client-side fetch wrappers for the API routes
+```
+
+**Phase 4 decisions:**
+10. **`web/` is self-contained** — separate `package.json`, its own `node_modules`, does not share the root lockfile.
+11. **Dynamic imports in API routes** — `src/` services are imported at request time using `path.resolve(__dirname, '../src')`, keeping the web bundle clean.
+12. **Token stays client-side** — GitHub tokens live in `sessionStorage` only, passed as `x-github-token` request header, never logged or persisted server-side.
+13. **Design tokens** — `web/tailwind.config.ts` extends the REPOSOUL palette from `assets/theme-tokens.json` so the dashboard and CLI share the same visual identity.
 
 | Module | Responsibility |
 |---|---|
@@ -74,9 +102,7 @@ reposoul blueprint <repo>
 
 ## Planned future architecture
 
-- **Phase 4:** REPOSOUL Dashboard — web frontend consuming the same services via a thin
-  API layer; dark theme driven by `assets/theme-tokens.json`
-- **Phase 5:** Kiro IDE integration
+- **Phase 5:** Kiro IDE integration — MCP server exposing REPOSOUL tools to Kiro agents
 
 ## Boundary between REPOSOUL and Kiro IDE
 

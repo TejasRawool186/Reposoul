@@ -347,9 +347,42 @@ The test suite mocks all external API calls. No real GitHub credentials or netwo
 - [x] Organization scanning with tech-debt metrics
 - [x] Vitest test suite and GitHub Actions CI
 - [x] Revival blueprint generator (`blueprint`, `report` commands)
+- [x] Web dashboard (Next.js, dark theme, three-page UI)
 - [ ] CLI command rename (discover, investigate)
-- [ ] REPOSOUL web dashboard
 - [ ] Kiro IDE integration
+
+---
+
+## Web dashboard
+
+REPOSOUL includes a Next.js web dashboard in the `web/` directory.
+
+### Prerequisites
+
+- Node.js 18+
+- The CLI project must be built first: `npm run build` in the root
+
+### Running the dashboard
+
+```bash
+cd web
+npm install
+npm run dev        # development — http://localhost:3000
+npm run build      # production build
+npm start          # production server
+```
+
+### Dashboard pages
+
+| Page | URL | Description |
+|---|---|---|
+| Discover | `/` | Search for abandoned repositories with language, stars, and date filters |
+| Investigate | `/investigate/<owner>/<repo>` | Full analysis view with score rings, metrics, and recommendations |
+| Blueprint | `/blueprint/<owner>/<repo>` | Revival blueprint with risk register, action checklist, effort estimate |
+
+### GitHub token
+
+Enter your GitHub token in the header to raise the rate limit from 60 to 5,000 requests per hour. The token is held in browser `sessionStorage` only — it is never sent to any external server.
 
 ---
 

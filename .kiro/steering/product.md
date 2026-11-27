@@ -33,11 +33,11 @@ accidental, and connects the resulting plan to an execution environment (Kiro ID
 4. **Workspace** — prepare a Kiro IDE workspace from a blueprint (planned)
 5. **Validate** — rebuild and verify the revived project (planned)
 
-## Current scope (Phase 3)
+## Current scope (Phase 4)
 
-Fully functional CLI with 11 commands, Vitest test suite, GitHub Actions CI, ESLint, and
-security-audited dependencies. The shipped feature set now includes the revival blueprint
-generator (`blueprint`, `report`) in addition to the Phase 2 commands.
+Fully functional CLI with 11 commands, Vitest test suite, GitHub Actions CI, and
+a Next.js web dashboard. The dashboard provides three pages: Discover, Investigate,
+and Blueprint — all powered by the existing TypeScript services via API routes.
 
 **All implemented CLI commands:**
 `hunt`, `analyze`, `forks`, `train`, `scan`, `scan-multi`, `languages`, `ml-info`,
