@@ -5,17 +5,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: ['axios'],
-  },
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        '@reposoul/core': path.resolve(__dirname, '../src'),
-      };
-    }
-    return config;
+  // Tell Next.js not to bundle these Node.js-only modules into the client bundle
+  serverExternalPackages: ['axios', 'dotenv'],
+
+  // Set absolute root for Turbopack to avoid lockfile confusion in monorepo
+  turbopack: {
+    root: __dirname,
   },
 };
 
