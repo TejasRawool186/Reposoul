@@ -35,7 +35,8 @@ REPOSOUL addresses this by providing:
 | Fork analysis | Fork activity, divergence from origin, maintainer responsiveness | Implemented |
 | Organization scanning | Per-organization scans with tech-debt cost, time, security, and business-impact metrics | Implemented |
 | ML scoring layer | In-process linear and logistic regression, blended with rule-based scores | Implemented (models require training) |
-| Output formats | Table, JSON, Markdown | Implemented |
+| Revival blueprint | Structured revival plan with effort estimate, risk register, action items, and dependency upgrades | Implemented |
+| Output formats | Table, JSON, Markdown, plain text | Implemented |
 
 ---
 
@@ -133,6 +134,28 @@ reposoul scan your-organization --output markdown > report.md
 reposoul scan-multi org1,org2,org3 --max-repos 20
 ```
 
+### Revival blueprint
+
+```bash
+# Generate a blueprint (Markdown to stdout)
+reposoul blueprint owner/repository-name
+
+# Generate blueprint as JSON
+reposoul blueprint owner/repository-name --output json
+
+# Include dependency and fork analysis
+reposoul blueprint owner/repository-name --include-deps --include-forks
+
+# Save to file
+reposoul blueprint owner/repository-name --file my-blueprint.md
+
+# Full report saved to owner-repo-report.md
+reposoul report owner/repository-name
+
+# Report with full analysis
+reposoul report owner/repository-name --include-deps --include-forks --ml-enhanced
+```
+
 ### ML-enhanced scoring
 
 ```bash
@@ -170,6 +193,8 @@ reposoul hunt --help
 | `hunt` | Search GitHub for abandoned repositories |
 | `analyze` | Analyze a single repository |
 | `forks` | Analyze the fork ecosystem of a repository |
+| `blueprint` | Generate a structured revival blueprint |
+| `report` | Generate a comprehensive revival report (saves to file) |
 | `train` | Train ML models on repository data |
 | `scan` | Scan all repositories for an organization or user |
 | `scan-multi` | Compare multiple organizations |
@@ -206,7 +231,7 @@ reposoul hunt --help
 ```
 src/
 ├── cli.ts                          Entry point — Commander CLI, all commands and formatters
-├── reposoul.ts                     ReposoulHunter — orchestrates search, analysis, and ML
+├── reposoul.ts                     ReposoulHunter — orchestrates search, analysis, ML, and blueprints
 ├── index.ts                        Library exports
 ├── types/
 │   └── index.ts                    Shared interfaces and design tokens
@@ -219,6 +244,8 @@ src/
     ├── ml-trainer.ts               In-process ML training and model persistence
     ├── ml-predictor.ts             Model loading, prediction, and score blending
     ├── organization-scanner.ts     Organization scans and tech-debt metrics
+    ├── blueprint-generator.ts      Revival blueprint generation (pure transformation)
+    ├── blueprint-formatter.ts      Blueprint output formatting (json/markdown/text/report)
     └── language-analyzers/
         ├── python-analyzer.ts      PyPI and OSV vulnerability data
         ├── rust-analyzer.ts        crates.io and RustSec
@@ -305,7 +332,7 @@ npm test                # single-pass run
 npm run test:coverage   # with coverage report
 ```
 
-Current coverage baseline: ~34% lines, ~62% branches, ~56% functions.
+Current coverage baseline: ~42% lines, ~69% branches, ~61% functions.
 
 The test suite mocks all external API calls. No real GitHub credentials or network access are required to run tests.
 
@@ -319,8 +346,8 @@ The test suite mocks all external API calls. No real GitHub credentials or netwo
 - [x] ML scoring layer
 - [x] Organization scanning with tech-debt metrics
 - [x] Vitest test suite and GitHub Actions CI
+- [x] Revival blueprint generator (`blueprint`, `report` commands)
 - [ ] CLI command rename (discover, investigate)
-- [ ] Revival blueprint generator
 - [ ] REPOSOUL web dashboard
 - [ ] Kiro IDE integration
 

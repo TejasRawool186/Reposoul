@@ -48,7 +48,7 @@
   from `cli.ts`
 - Comments in English; commit messages follow conventional commits (feat/fix/docs/refactor/test)
 
-## Phase 2 engineering rules
+## Phase 2 & 3 engineering rules
 
 - **Every new feature needs tests** before merging to `main`
 - **Do not break existing CLI commands** — regression test after any service change

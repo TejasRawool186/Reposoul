@@ -23,17 +23,31 @@ REPOSOUL is a compiled TypeScript CLI (`tsc` → `dist/`, CommonJS). Entry point
 | `services/organization-scanner.ts` | Org/user scans, tech-debt cost/time/security/business metrics |
 | `types/index.ts` | Canonical shared interfaces + REPOSOUL brand tokens (single source of truth — do NOT duplicate in services) |
 
-### Data flow
+### Phase 3 additions
+
+| Module | Responsibility |
+|---|---|
+| `services/blueprint-generator.ts` | `BlueprintGenerator` — derives RevivalBlueprint from RepositoryAnalysis + optional DependencyAnalysis + ForkComparison. Pure transformation, no I/O. |
+| `services/blueprint-formatter.ts` | `BlueprintFormatter` — formats RevivalBlueprint as json/markdown/text/report |
+
+### Phase 3 data flow addition
 
 ```
-CLI (Commander)
-  └─ ReposoulHunter
-       ├─ GitHubService.searchRepositoriesEnhanced()
-       ├─ RepositoryAnalyzer.analyzeRepository(repo)
-       │    ├─ DependencyAnalyzer (→ MultiLanguageAnalyzer → language analyzers)
-       │    └─ MLPredictor.enhanceAnalysis() (if models available)
-       └─ results → table | json | markdown output
+reposoul blueprint <repo>
+  └─ ReposoulHunter.generateBlueprint()
+       ├─ analyzeRepository()      — existing pipeline
+       ├─ [optional] DependencyAnalyzer.analyzeDependencies()
+       ├─ [optional] ForkAnalyzer.analyzeForks()
+       └─ BlueprintGenerator.generate()
+            └─ BlueprintFormatter.format()  → stdout / file
 ```
+
+### Phase 3 architecture decisions
+
+6. **BlueprintGenerator is pure** — no network calls, no file I/O, no side effects. Fully testable with fixtures alone.
+7. **Dynamic imports in CLI** — `BlueprintGenerator` and `BlueprintFormatter` are imported dynamically in `cli.ts` to keep startup time fast for existing commands.
+8. **RevivalBlueprint types in `src/types/index.ts`** — `Severity`, `EffortEstimate`, `RiskItem`, `ActionItem`, `DependencyUpgrade`, `BlueprintSection`, `RevivalBlueprint`, `BlueprintOptions` follow the canonical types rule.
+9. **`reposoul report` saves to file by default** — outputs `<owner-repo>-report.md` to the current directory to avoid polluting stdout with large Markdown.
 
 ### Phase 2 architecture decisions
 
@@ -60,8 +74,6 @@ CLI (Commander)
 
 ## Planned future architecture
 
-- **Phase 3:** Revival blueprint generator — pure-TS module producing a structured
-  blueprint document (scope, effort, dependency plan, risks) from an analysis
 - **Phase 4:** REPOSOUL Dashboard — web frontend consuming the same services via a thin
   API layer; dark theme driven by `assets/theme-tokens.json`
 - **Phase 5:** Kiro IDE integration

@@ -33,21 +33,25 @@ accidental, and connects the resulting plan to an execution environment (Kiro ID
 4. **Workspace** — prepare a Kiro IDE workspace from a blueprint (planned)
 5. **Validate** — rebuild and verify the revived project (planned)
 
-## Current scope (Phase 2)
+## Current scope (Phase 3)
 
-Fully functional CLI with 9 commands, Vitest test suite, GitHub Actions CI, ESLint, and
-security-audited dependencies. The working CLI (`hunt`, `analyze`, `forks`, `train`,
-`scan`, `scan-multi`, `languages`, `ml-info`, `rate-limit`) is the shipped feature set.
+Fully functional CLI with 11 commands, Vitest test suite, GitHub Actions CI, ESLint, and
+security-audited dependencies. The shipped feature set now includes the revival blueprint
+generator (`blueprint`, `report`) in addition to the Phase 2 commands.
+
+**All implemented CLI commands:**
+`hunt`, `analyze`, `forks`, `train`, `scan`, `scan-multi`, `languages`, `ml-info`,
+`rate-limit`, `blueprint`, `report`
 
 ## Future command surface (proposed, not implemented)
 
 ```
-reposoul discover      # replaces hunt
-reposoul investigate   # replaces analyze
-reposoul blueprint     # new (Phase 3)
+reposoul blueprint     # implemented (Phase 3)
+reposoul report        # implemented (Phase 3)
+reposoul discover      # replaces hunt (Phase 4+)
+reposoul investigate   # replaces analyze (Phase 4+)
 reposoul workspace     # new (Phase 5)
 reposoul validate      # new (Phase 5)
-reposoul report        # new (Phase 3)
 ```
 
 Do not implement these until their phase begins.
