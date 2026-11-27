@@ -100,9 +100,49 @@ reposoul blueprint <repo>
 - Current baseline: 88 tests, lines 33.76%, branches 61.76%, functions 56.49%
 - Coverage thresholds: lines/stmts 30%, functions 40%, branches 30%
 
-## Planned future architecture
+### Phase 5 architecture (Kiro IDE MCP integration)
 
-- **Phase 5:** Kiro IDE integration — MCP server exposing REPOSOUL tools to Kiro agents
+```
+src/mcp/
+├── server.ts     MCP stdio server — JSON-RPC 2.0 over stdin/stdout
+├── tools.ts      Tool definitions advertised on initialize
+└── handlers.ts   McpHandlers class — dispatches tool calls to existing services
+```
+
+**Five MCP tools exposed to Kiro:**
+
+| Tool | Description |
+|---|---|
+| `search_repositories` | Search GitHub for abandoned repositories |
+| `analyze_repository` | Full analysis — scores, recommendations |
+| `generate_blueprint` | Revival blueprint (json/markdown/text) |
+| `analyze_forks` | Fork ecosystem comparison |
+| `get_rate_limit` | GitHub API quota check |
+
+**Phase 5 decisions:**
+14. **stdio transport** — no HTTP server, no ports. Kiro spawns the process and communicates over stdin/stdout (JSON-RPC lines).
+15. **McpHandlers wraps existing services** — no code duplication. The MCP server is a thin protocol adapter over the same `ReposoulHunter` and `GitHubService` already used by the CLI.
+16. **Token from environment** — `GITHUB_TOKEN` or `GITHUB_OAUTH_TOKEN` loaded at server startup from `.env`; passed as `${env:GITHUB_TOKEN}` in `.kiro/settings/mcp.json`.
+17. **New CLI commands** — `reposoul workspace` generates a Kiro-ready workspace scaffold; `reposoul validate` checks minimum revival standards.
+
+**Two new CLI commands (Phase 5):**
+- `reposoul workspace <owner/repo>` — generates `WORKSPACE.md`, `blueprint.md`, `blueprint.json`
+- `reposoul validate <owner/repo>` — runs 5 revival-readiness checks
+
+**Kiro configuration** — `.kiro/settings/mcp.json` wires the server:
+```json
+{
+  "mcpServers": {
+    "reposoul": {
+      "command": "node",
+      "args": ["dist/mcp/server.js"],
+      "env": { "GITHUB_TOKEN": "${env:GITHUB_TOKEN}" }
+    }
+  }
+}
+```
+
+
 
 ## Boundary between REPOSOUL and Kiro IDE
 

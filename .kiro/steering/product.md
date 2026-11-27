@@ -33,15 +33,17 @@ accidental, and connects the resulting plan to an execution environment (Kiro ID
 4. **Workspace** — prepare a Kiro IDE workspace from a blueprint (planned)
 5. **Validate** — rebuild and verify the revived project (planned)
 
-## Current scope (Phase 4)
+## Current scope (Phase 5 — complete)
 
-Fully functional CLI with 11 commands, Vitest test suite, GitHub Actions CI, and
-a Next.js web dashboard. The dashboard provides three pages: Discover, Investigate,
-and Blueprint — all powered by the existing TypeScript services via API routes.
+All five phases implemented. Full feature set:
 
-**All implemented CLI commands:**
+**CLI commands (13):**
 `hunt`, `analyze`, `forks`, `train`, `scan`, `scan-multi`, `languages`, `ml-info`,
-`rate-limit`, `blueprint`, `report`
+`rate-limit`, `blueprint`, `report`, `workspace`, `validate`
+
+**Web dashboard:** `web/` — Next.js 16, three pages (Discover, Investigate, Blueprint)
+
+**Kiro MCP server:** `dist/mcp/server.js` — 5 tools over stdio JSON-RPC
 
 ## Future command surface (proposed, not implemented)
 

@@ -195,6 +195,8 @@ reposoul hunt --help
 | `forks` | Analyze the fork ecosystem of a repository |
 | `blueprint` | Generate a structured revival blueprint |
 | `report` | Generate a comprehensive revival report (saves to file) |
+| `workspace` | Generate a Kiro IDE workspace scaffold |
+| `validate` | Validate a repository against revival standards |
 | `train` | Train ML models on repository data |
 | `scan` | Scan all repositories for an organization or user |
 | `scan-multi` | Compare multiple organizations |
@@ -348,8 +350,40 @@ The test suite mocks all external API calls. No real GitHub credentials or netwo
 - [x] Vitest test suite and GitHub Actions CI
 - [x] Revival blueprint generator (`blueprint`, `report` commands)
 - [x] Web dashboard (Next.js, dark theme, three-page UI)
-- [ ] CLI command rename (discover, investigate)
-- [ ] Kiro IDE integration
+- [x] Kiro IDE MCP integration (`workspace`, `validate` commands, MCP server)
+
+---
+
+## Kiro IDE integration (MCP)
+
+REPOSOUL exposes a Model Context Protocol (MCP) server so Kiro IDE agents can call REPOSOUL tools directly.
+
+### Setup
+
+1. Build the project: `npm run build` in the root
+2. Set `GITHUB_TOKEN` in your environment or `.env` file
+3. The `.kiro/settings/mcp.json` file is already configured — Kiro will auto-detect it
+
+### Available MCP tools
+
+| Tool | Description |
+|---|---|
+| `search_repositories` | Search GitHub for abandoned repositories |
+| `analyze_repository` | Full analysis — scores, recommendations |
+| `generate_blueprint` | Revival blueprint (json, markdown, or text) |
+| `analyze_forks` | Fork ecosystem comparison |
+| `get_rate_limit` | GitHub API quota status |
+
+### Workspace and validation commands
+
+```bash
+# Generate a Kiro-ready workspace scaffold
+reposoul workspace owner/repository-name
+
+# Validate revival readiness
+reposoul validate owner/repository-name
+reposoul validate owner/repository-name --strict   # exit 1 on high-severity failures
+```
 
 ---
 
