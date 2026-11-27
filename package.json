@@ -4,7 +4,8 @@
   "description": "An AI-powered open-source resurrection workbench. Discover abandoned repositories, investigate their technical condition, and plan their revival.",
   "main": "dist/index.js",
   "bin": {
-    "reposoul": "dist/cli.js"
+    "reposoul": "dist/cli.js",
+    "reposoul-mcp": "dist/mcp/server.js"
   },
   "engines": {
     "node": ">=18.0.0",
