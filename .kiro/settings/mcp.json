@@ -1,0 +1,1 @@
+{"mcpServers":{"reposoul":{"command":"node","args":["dist/mcp/server.js"],"cwd":"${workspaceFolder}","env":{"GITHUB_TOKEN":"${env:GITHUB_TOKEN}"},"disabled":false}}}
