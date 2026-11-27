@@ -299,3 +299,119 @@ export const REPOSOUL_TERMINAL = {
   warning:  REPOSOUL_COLORS.warning,
   error:    REPOSOUL_COLORS.error,
 } as const;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Phase 3 — Revival Blueprint Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Severity classification for risks and issues */
+export type Severity = 'critical' | 'high' | 'medium' | 'low';
+
+/** Effort estimation for a revival task */
+export interface EffortEstimate {
+  /** Minimum working days */
+  minDays: number;
+  /** Maximum working days */
+  maxDays: number;
+  /** Recommended team size */
+  teamSize: number;
+  /** Complexity rating */
+  complexity: 'trivial' | 'low' | 'medium' | 'high' | 'very-high';
+  /** Key factors driving the estimate */
+  factors: string[];
+}
+
+/** A single identified risk in the revival plan */
+export interface RiskItem {
+  id: string;
+  title: string;
+  description: string;
+  severity: Severity;
+  probability: 'low' | 'medium' | 'high';
+  impact: string;
+  mitigation: string;
+  category: 'technical' | 'dependency' | 'community' | 'legal' | 'operational';
+}
+
+/** A concrete action item with priority and owner suggestion */
+export interface ActionItem {
+  id: string;
+  title: string;
+  description: string;
+  priority: 1 | 2 | 3 | 4 | 5; // 1 = highest
+  phase: 'immediate' | 'short-term' | 'medium-term' | 'long-term';
+  effort: 'hours' | 'days' | 'weeks';
+  category: 'dependency' | 'testing' | 'documentation' | 'ci-cd' | 'security' | 'refactor' | 'community';
+  done: boolean;
+}
+
+/** Dependency upgrade recommendation */
+export interface DependencyUpgrade {
+  name: string;
+  currentVersion: string;
+  targetVersion: string;
+  reason: 'security' | 'outdated' | 'deprecated' | 'breaking-change';
+  breaking: boolean;
+  priority: Severity;
+  notes?: string;
+}
+
+/** A named section of the blueprint */
+export interface BlueprintSection {
+  id: string;
+  title: string;
+  content: string;
+}
+
+/** The complete revival blueprint for a repository */
+export interface RevivalBlueprint {
+  // Identity
+  repository: string; // owner/name
+  generatedAt: string; // ISO timestamp
+  version: '1.0';
+
+  // Summary
+  recommendation: 'revive' | 'fork' | 'archive' | 'monitor';
+  recommendationReason: string;
+  overallScore: number; // 0-100 composite
+  confidence: 'high' | 'medium' | 'low';
+
+  // Scores from analysis
+  scores: {
+    abandonment: number;
+    revivalPotential: number;
+    communityEngagement: number;
+    dependencyHealth: number;
+    technicalComplexity: string;
+  };
+
+  // Effort
+  effortEstimate: EffortEstimate;
+
+  // Plan
+  riskRegister: RiskItem[];
+  actionItems: ActionItem[];
+  dependencyUpgrades: DependencyUpgrade[];
+
+  // Narrative sections
+  executiveSummary: string;
+  technicalAssessment: string;
+  communityAssessment: string;
+  revivalStrategy: string;
+
+  // Metadata
+  sections: BlueprintSection[];
+  tags: string[];
+}
+
+/** Options passed to BlueprintGenerator */
+export interface BlueprintOptions {
+  /** Include fork ecosystem analysis */
+  includeForks?: boolean;
+  /** Include ML predictions if available */
+  mlEnhanced?: boolean;
+  /** Maximum number of action items to include */
+  maxActionItems?: number;
+  /** Maximum number of risks to include */
+  maxRisks?: number;
+}
