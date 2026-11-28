@@ -17,12 +17,13 @@ export interface ApiError {
   status: number;
 }
 
-async function apiFetch<T>(url: string, token: string, body?: object): Promise<T> {
+async function apiFetch<T>(url: string, token: string, body?: object, extraHeaders?: Record<string, string>): Promise<T> {
   const res = await fetch(url, {
     method: body ? 'POST' : 'GET',
     headers: {
       'Content-Type': 'application/json',
       'x-github-token': token,
+      ...(extraHeaders ?? {}),
     },
     ...(body ? { body: JSON.stringify(body) } : {}),
   });
@@ -36,14 +37,44 @@ async function apiFetch<T>(url: string, token: string, body?: object): Promise<T
   return data as T;
 }
 
+/**
+ * Parse a repository identifier — accepts:
+ *   "owner/repo"
+ *   "https://github.com/owner/repo"
+ *   "github.com/owner/repo"
+ * Returns "owner/repo" or throws if unparseable.
+ */
+export function parseRepo(input: string): string {
+  const trimmed = input.trim();
+  const urlMatch = trimmed.match(/(?:https?:\/\/)?github\.com\/([^/\s]+\/[^/\s]+?)(?:\.git)?\/?$/i);
+  if (urlMatch) return urlMatch[1];
+  if (trimmed.includes('/')) return trimmed;
+  throw new Error(`Cannot parse repository: "${trimmed}". Use owner/repo or a GitHub URL.`);
+}
+
 export function searchRepositories(params: SearchParams, token: string) {
   return apiFetch('/api/search', token, params);
 }
 
 export function analyzeRepository(fullName: string, token: string) {
-  return apiFetch(`/api/analyze?repo=${encodeURIComponent(fullName)}`, token);
+  const repo = parseRepo(fullName);
+  return apiFetch(`/api/analyze?repo=${encodeURIComponent(repo)}`, token);
 }
 
 export function generateBlueprint(fullName: string, token: string) {
-  return apiFetch(`/api/blueprint?repo=${encodeURIComponent(fullName)}`, token);
+  const repo = parseRepo(fullName);
+  return apiFetch(`/api/blueprint?repo=${encodeURIComponent(repo)}`, token);
+}
+
+export interface AiSearchParams {
+  query: string;
+  maxResults?: number;
+  analyzeAll?: boolean;
+  groqApiKey?: string;
+}
+
+export function aiSearch(params: AiSearchParams, token: string) {
+  const headers: Record<string, string> = {};
+  if (params.groqApiKey) headers['x-groq-api-key'] = params.groqApiKey;
+  return apiFetch('/api/ai-search', token, params, headers);
 }

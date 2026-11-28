@@ -482,3 +482,77 @@ export const MCP_ERROR = {
   INVALID_PARAMS:   -32602,
   INTERNAL_ERROR:   -32603,
 } as const;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Phase 1 — AI Semantic Discovery Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Structured search intent derived from a natural-language query */
+export interface SearchIntent {
+  /** Original user query preserved for display */
+  originalQuery: string;
+  /** Keywords extracted for GitHub search */
+  keywords: string[];
+  /** Programming languages to filter by */
+  languages: string[];
+  /** Technical/problem domains */
+  domains: string[];
+  /** Minimum star count (null = no constraint) */
+  minimumStars: number | null;
+  /** Maximum star count (null = no constraint) */
+  maximumStars: number | null;
+  /** Abandonment preference */
+  abandonmentPreference: 'any' | 'likely_abandoned' | 'definitely_abandoned';
+  /** Technical issues the user wants to find */
+  technicalIssues: Array<'outdated_dependencies' | 'no_tests' | 'no_ci' | 'security_vulnerabilities' | 'no_documentation'>;
+  /** Preferred sort for results */
+  sortPreference: 'revival_potential' | 'stars' | 'recent_activity' | 'semantic_relevance';
+  /** Date before which the repo should have been last pushed (ISO date string) */
+  pushedBefore: string | null;
+  /** Confidence that the query was understood correctly (0–1) */
+  confidence: number;
+}
+
+/** A repository candidate with semantic ranking metadata */
+export interface RankedRepository {
+  repository: GitHubRepository;
+  analysis: RepositoryAnalysis | null;
+  /** Semantic similarity to the query embedding (0–1) */
+  semanticScore: number;
+  /** Overall hybrid rank score (0–100) */
+  hybridScore: number;
+  /** Short explanation of why this repository matches */
+  matchReason: string;
+  /** Identified technical problems */
+  technicalProblems: string[];
+  /** Rank position in results */
+  rank: number;
+}
+
+/** Result of a semantic discovery search */
+export interface SemanticSearchResult {
+  intent: SearchIntent;
+  results: RankedRepository[];
+  totalCandidates: number;
+  executionTimeMs: number;
+  timestamp: string;
+  aiProvider: string;
+  embeddingModel: string;
+}
+
+/** Embedding vector with metadata */
+export interface EmbeddingResult {
+  vector: number[];
+  model: string;
+  dimensions: number;
+  inputText: string;
+}
+
+/** AI provider configuration */
+export interface AIProviderConfig {
+  groqApiKey?: string;
+  groqModel?: string;
+  embeddingModel?: string;
+  maxTokens?: number;
+  temperature?: number;
+}
