@@ -556,3 +556,44 @@ export interface AIProviderConfig {
   maxTokens?: number;
   temperature?: number;
 }
+
+// ─── Workspace types (Phase 2) ─────────────────────────────────────────────────
+
+/** Progress callback for long-running workspace operations */
+export type WorkspaceProgressCallback = (
+  message: string,
+  detail?: string
+) => void;
+
+/** Result of a workspace clone operation */
+export interface WorkspaceCloneResult {
+  success: boolean;
+  path: string | null;
+  sizeBytes: number | null;
+  totalFiles: number | null;
+  defaultBranch: string | null;
+  headCommit: string | null;
+  error: string | null;
+}
+
+/** Result of a workspace preparation operation */
+export interface WorkspaceResult {
+  repository: string;
+  workspacePath: string;
+  blueprintPath: string;
+  blueprintJsonPath: string;
+  cloned: WorkspaceCloneResult | null;
+  filesWritten: string[];
+  durationMs: number;
+}
+
+/** Summary info about a prepared workspace */
+export interface WorkspaceInfo {
+  repository: string;
+  workspacePath: string;
+  createdAt: string;
+  defaultBranch: string | null;
+  headCommit: string | null;
+  hasBlueprint: boolean;
+  hasClone: boolean;
+}
