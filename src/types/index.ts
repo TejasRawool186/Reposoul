@@ -659,3 +659,75 @@ export interface EditorInstallation {
   path: string | null;
   isKiro: boolean;
 }
+
+// ─── Live Monitoring types (Phase 4) ──────────────────────────────────────────
+
+/** Categories of workspace filesystem events */
+export type WorkspaceEventType =
+  | 'file_added'
+  | 'file_changed'
+  | 'file_deleted'
+  | 'file_renamed'
+  | 'git_commit'
+  | 'git_branch_changed'
+  | 'monitor_started'
+  | 'monitor_stopped'
+  | 'error';
+
+/** A single workspace event emitted by the monitor */
+export interface WorkspaceEvent {
+  id: string;
+  workspaceId: string;
+  type: WorkspaceEventType;
+  /** Relative path inside the workspace (undefined for git/meta events) */
+  path?: string;
+  /** Additional context (commit hash, branch name, error message, etc.) */
+  detail?: string;
+  timestamp: string;
+}
+
+/** Point-in-time status snapshot of a monitored workspace */
+export interface WorkspaceStatusSnapshot {
+  workspaceId: string;
+  workspacePath: string;
+  repoPath: string | null;
+  /** True when the repo/ subdirectory exists and is a git repo */
+  hasRepo: boolean;
+  /** Current branch name, or null */
+  currentBranch: string | null;
+  /** HEAD commit hash (full), or null */
+  headCommit: string | null;
+  /** Number of uncommitted changes (modified + untracked) */
+  pendingChanges: number;
+  /** Short summary lines from git status --short */
+  statusLines: string[];
+  /** ISO timestamp of this snapshot */
+  capturedAt: string;
+}
+
+/** A single changed-file entry in a diff */
+export interface DiffEntry {
+  path: string;
+  status: 'modified' | 'added' | 'deleted' | 'renamed' | 'untracked';
+  /** Unified diff text, present when available */
+  patch?: string;
+}
+
+/** Result of a workspace diff operation */
+export interface WorkspaceDiff {
+  workspaceId: string;
+  repoPath: string | null;
+  entries: DiffEntry[];
+  totalChanges: number;
+  capturedAt: string;
+}
+
+/** Options for WorkspaceMonitorService */
+export interface MonitorOptions {
+  /** Glob patterns to ignore (default: node_modules, .git internals, dist, etc.) */
+  ignored?: string[];
+  /** Debounce delay in ms before emitting a batch of events (default: 300) */
+  debounceMs?: number;
+  /** Whether to report initial file scan as events (default: false) */
+  ignoreInitial?: boolean;
+}
