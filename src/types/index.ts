@@ -597,3 +597,65 @@ export interface WorkspaceInfo {
   hasBlueprint: boolean;
   hasClone: boolean;
 }
+
+// ─── Workspace Registry types (Phase 3) ───────────────────────────────────────
+
+/** Status of a registered workspace */
+export type WorkspaceStatus = 'ready' | 'cloning' | 'error' | 'missing';
+
+/** A workspace entry stored in the registry */
+export interface WorkspaceEntry {
+  /** UUID assigned at creation */
+  id: string;
+  /** owner/repo */
+  repository: string;
+  /** Absolute path to the workspace directory */
+  workspacePath: string;
+  /** ISO timestamp of creation */
+  createdAt: string;
+  /** ISO timestamp of last access */
+  lastAccessedAt: string;
+  /** Current status */
+  status: WorkspaceStatus;
+  /** Short human-readable note (e.g. clone error message) */
+  statusNote: string | null;
+  /** True when repo/ subdir exists and was cloned successfully */
+  hasClone: boolean;
+  /** True when blueprint.md exists */
+  hasBlueprint: boolean;
+  /** Default branch from clone metadata */
+  defaultBranch: string | null;
+  /** HEAD commit hash (short) */
+  headCommit: string | null;
+  /** Tags applied by the user */
+  tags: string[];
+}
+
+/** Payload for creating a new workspace entry */
+export interface CreateWorkspacePayload {
+  repository: string;
+  workspacePath: string;
+  hasClone?: boolean;
+  hasBlueprint?: boolean;
+  defaultBranch?: string | null;
+  headCommit?: string | null;
+  tags?: string[];
+  statusNote?: string | null;
+}
+
+/** Result of a Kiro/editor open attempt */
+export interface LaunchResult {
+  success: boolean;
+  editor: string | null;
+  editorPath: string | null;
+  workspacePath: string;
+  error: string | null;
+}
+
+/** Detected editor installation */
+export interface EditorInstallation {
+  name: string;
+  command: string;
+  path: string | null;
+  isKiro: boolean;
+}

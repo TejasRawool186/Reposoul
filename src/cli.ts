@@ -1474,16 +1474,39 @@ program
         },
       });
 
+      const { WorkspaceRegistry } = await import('./services/workspace-registry');
+      const registry = new WorkspaceRegistry();
+
       if (options.clone === false) {
         // No-clone path: write blueprint files only
         spinner.text = 'Writing workspace files (no clone)...';
         const result = await manager.prepareNoClone(repository, blueprint, outputDir);
+
+        // Register in the workspace registry
+        registry.register({
+          repository,
+          workspacePath: result.workspacePath,
+          hasClone: false,
+          hasBlueprint: true,
+        });
+
         spinner.stop();
         printWorkspaceSummary(result, false);
         return;
       }
 
       const result = await manager.prepare(repository, blueprint, outputDir);
+
+      // Register in the workspace registry
+      registry.register({
+        repository,
+        workspacePath: result.workspacePath,
+        hasClone: result.cloned?.success ?? false,
+        hasBlueprint: true,
+        defaultBranch: result.cloned?.defaultBranch ?? null,
+        headCommit: result.cloned?.headCommit ?? null,
+        statusNote: result.cloned?.success === false ? (result.cloned.error ?? null) : null,
+      });
 
       spinner.stop();
       printWorkspaceSummary(result, true);

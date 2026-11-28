@@ -31,6 +31,12 @@ export function Header() {
           <Link href="/" className="px-3 py-1.5 rounded hover:bg-elevated text-text-secondary hover:text-text-primary transition-colors">
             Discover
           </Link>
+          <Link href="/discover" className="px-3 py-1.5 rounded hover:bg-elevated text-text-secondary hover:text-text-primary transition-colors">
+            AI Search
+          </Link>
+          <Link href="/workspaces" className="px-3 py-1.5 rounded hover:bg-elevated text-text-secondary hover:text-text-primary transition-colors">
+            Workspaces
+          </Link>
         </nav>
 
         {/* Token indicator */}
