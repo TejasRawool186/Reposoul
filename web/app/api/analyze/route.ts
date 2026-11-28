@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import path from 'path';
-
-const srcPath = path.resolve(process.cwd(), '..', 'src');
+import { getReposoulHunter } from '@/lib/reposoul-server';
 
 export async function GET(req: NextRequest) {
   try {
@@ -12,13 +10,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'repo parameter must be owner/name' }, { status: 400 });
     }
 
-    const { ReposoulHunter } = await import(path.join(srcPath, 'reposoul'));
-
-    const auth = token
-      ? token.startsWith('gho_') ? { oauthToken: token, tokenType: 'oauth' as const } : { token, tokenType: 'pat' as const }
-      : {};
-
-    const hunter = new ReposoulHunter(auth);
+    const hunter = getReposoulHunter(token);
     const analysis = await hunter.analyzeRepository(repo);
 
     return NextResponse.json(analysis);

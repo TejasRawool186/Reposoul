@@ -5,10 +5,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Tell Next.js not to bundle these Node.js-only modules into the client bundle
+  // Keep axios and dotenv server-side only — never bundled to the browser
   serverExternalPackages: ['axios', 'dotenv'],
 
-  // Set absolute root for Turbopack to avoid lockfile confusion in monorepo
+  // Turbopack absolute workspace root
   turbopack: {
     root: __dirname,
   },
